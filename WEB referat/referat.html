@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ivan Alieksieiev, 0MI8000012, iialekseev@uni-sofia.bg">
+    <link rel="stylesheet" href="./css/referat.css">
+    <title>URL rewriting</title>
+</head>
+<body>
+    <article class="navigation-container">
+        <nav class="navigation-content">
+            <h2>Съдържание</h2>
+            <ul class="navigation-list">
+                <li>
+                    <a href="#URLrewritingStart">Въведение в URL</a>
+                </li>
+                <li>
+                    <a href="#URLformat">Формат на URL адрес</a>
+                </li>
+                <li>
+                    <a href="#URLusages">За какви цели може да се ползва URL</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#URLforMailto">URL и Mailto</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#URLforJDBC">URL и JDBC</a>
+                </li>
+                <li>
+                    <a href="#NeedForURLrewriting">Има ли нужда от преработка на URL адреси ?</a>
+                </li>
+                <li>
+                    <a href="#SenseOfURLrewriting">URL rewriting: концепция</a>
+                </li>
+                <li>
+                    <a href="#mod_rewrite">URL rewriting: Apache mod_rewrite</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteSetup">С какво да започнем</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteWorkScheme">Как работи mod_rewrite</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#RegexBasics">Базови регуларни изрази</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteSyntax">Базов синтаксис</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteRewriteCond">RewriteCond</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteRewriteRule">RewriteRule</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteRegexBackReference">Regex back-reference</a>
+                </li>
+                <li>
+                    <a href="#mod_rewriteSpecificExamples">mod_rewrite: специфични примери</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteExample1">Пример-1: няколко RewriteCond израза</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteExample2">Пример-2: няколко RewriteCond и флаг [OR]</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteExample3">Пример-3: RewriteRule и [NC] флаг</a>
+                </li>
+                <li class="list-subelement">
+                    <a href="#mod_rewriteExample4">Пример-4: RewriteRule и релативно връзвани външни файлове</a>
+                </li>
+                <li>
+                    <a href="#URLrewritingWhenCanMakeTroubles">URL rewriting: кога създава затруднения</a>
+                </li>
+                <li>
+                    <a href="#UsedSources">Използваните ресурси</a>
+                </li>
+                <li>
+                    <a href="#UsedPictures">Използваните снимки</a>
+                </li>
+            </ul>
+        </nav>
+    </article>
+    <main class="content-container">
+        <header class="header-container">
+            <h1>URL rewriting</h1>
+            <figure>
+                <img src="./img/Essay logo.png" alt="Rewriting logo" height="300" width="330">
+            </figure>
+            <p>
+                Техника, наречена пренаписване на URL адреси, която може да превърне трудните за запомняне и четене URL адреси в добре разбираеми и лесни за възпроизвеждане , избягвайки разходи на време/финанси в измисленето на оптимален домейн. Позволява ви да попълните вашите URL адреси с удобни, четливи ключови думи, без да засягате основната структура на вашите страници.
+            </p>
+            <hr>
+        </header>
+        <article>
+            <h2>
+                <a id="URLrewritingStart"></a>
+                Въведение в URL <sup><a href="#source_6">[6]</a></sup><sup><a href="#source_10">[10]</a></sup>
+            </h2>
+            <p>
+                Всеки един потребител на Интернет услуги и браузър поне веднъж чувал за термин URL и сигурно е използвал това “URL” за достъпване на HTML страници. Въпреки това, мнозинство не знае нищо за това съкращение, а час от тези, които знаят, само частично са запознати с URL.
+            </p>
+            <p>
+                Най-често хора си представят URL като името на конкретен файл на някоя машина в Интернет мрежа(WWW). Това не е изцяло правилно. Защо ? Защото URL може да сочи и до другите ресурси в мрежата като заявки към базата данни.
+            </p>
+            <p class="subparagraph">
+                <b>Пример:</b><br><span>https://example.com/book?isbn=9780451524935</span>
+            </p>
+            <p>
+                По-горният пример показва заявката към базата данни, където искаме да получим книгата(book) със значението на променлива <span>isbn</span> равно на <b>9780451524935</b>.
+            </p>
+            <p>
+                Нека да дадем дефиниция за URL. URL(Uniform Resource Locator) – това е референция(адрес) към някакъв ресурс, намиращ се в мрежата Интернет. Или казано по прост начин – URL адресите са езикът за сърфиране в Интернет, което всеки ден осъществяваме. Самият URL може да се види в браузъра, а по-точно в адресната лента.
+            </p>
+            <p>
+                Хората могат да използват взаимозаменяемо понятията “URI” и вече споменато “URL”, но всъщност добре е да се прави разлика, че URL е специфичен вид на <a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier" alt="URI">URI(Uniform Resource Identifier)</a>.
+            </p>
+        </article>
+        <article>
+            <h2>
+                <a id="URLformat"></a>
+                Формат на URL адрес <sup><a href="#source_10">[10]</a></sup><sup><a href="#source_11">[11]</a></sup>
+            </h2>
+            <figure>
+                <img src="./img/URI_syntax_diagram.svg.png" alt="URL full syntax" width="1000" style="background-color: wheat;">
+                <p>
+                    Фигура-1 <sup><a href="#picture_2" alt="URL address full syntax">[2]</a></sup>: пълна сигнатура на URL адрес заедно с незадължителни параметри.
+                </p>
+            </figure>
+            <p><b>scheme:</b> схема или по-директно протокол, който браузър ще трябва да ползва да достъпи съответен ресурс. Самото името на протокол е непразна последователност на символи, започваща с буквата и следвана от някаква комбинация на <span>букви</span>/<span>цифри</span>/<span>+</span>/<span>.</span>/<span>-</span>. Името на схема е нечувствително към регистъра, но въпреки това каноничният начин за за изписването е точно с малки букви(<span>http</span>, <span>https</span>, <span>mailto</span>, <span>ftp</span>, <span>data</span> …).</p>
+            <p><b>userinfo:</b> незадължителен подкомпонент на URL, който състои от потребителско име и парола, разделени със символ <span>:</span> (<span>username:password</span>).</p>
+            <p><b>host:</b> подкомпонент, който е представен чрез името на домейн(www.example.com) или  IP-адрес(IPV-4 или IPV-6).</p>
+            <p><b>port:</b> портът е числова стойност, която се използва за идетифициране на техническа “порта” за достъп до ресурсите на уеб сървъра. Е незадължителен подкомпонент, ако се използват стандартните значения (за HTTP е <span>80</span>, за HTTPS е <span>443</span>). Иначе е задължително да се зададе явно.</p>
+            <p><b>path:</b> път е последователност от имената на папките, разделени със символ <span>/</span>, която се завършва с името на “конкретен файл” с базовите расширения като: <span>.html</span>, <span>.php</span>, … Преди време подкомпонент path идентифицираше физическа локация на файл, намиращ се на уеб сървъра. Сега вече път от типа <span>/path/to/myfile/test.html</span> не е нищо повече от абстракция на уеб сървъра, която не сочи до физически файл.</p>
+            <p><b>query:</b> заявка или параметри за един URL представляват от себе последователност от двойките ключ-стойност, които са разделени с разделител <span>&</span>. Параметрите за URL са незадължителни. Самата роля на тези параметри е такава, че уеб сървър да може да извърши допълнителни действия преди да е върнал самият ресурс.</p>
+            <p class="subparagraph">
+                <b>Пример:</b><br><span>https://api.example.com/products?<span class="subspan">category=electronics</span>&<span class="subspan">page=1</span></span>
+            </p>
+            <p class="subparagraph">
+                По-горният пример показва, че искаме да достъпим ресурс, отнасящ се до <span>products</span> с категория <span>electronics</span> и страницата да е <span>1</span>
+            </p>
+            <p>
+                <b>fragment(anchor):</b> този подкомпонент изпълнява роля на котва/отметка, премествайки потребителя точно до конкретната секция/част, която я е задал. За видеата това може да значи да прелистне видеото до конкретен момент на време.
+            </p>
+            <p class="subparagraph">
+                <b>Пример:</b><br><span>https://www.example.com/page<span class="subspan">#section6</span></span>
+            </p>
+            <p class="subparagraph">
+                Горният пример се опитва да достъпи ресурса page от уеб сървъра и е указан фрагмент <span>#section6</span>, към който потребителя иска да го навигират.
+            </p>
+        </article>
+        <article>
+            <h2>
+                <a id="URLusages"></a>
+                За какви цели може да се ползва URL <sup><a href="#source_10">[10]</a></sup>
+            </h2>
+            <p>URL адресите се най-често служат като референция към уеб страници (HTTP/HTTPS), но се използват и за прехвърляне на файлове (FTP), имейли (mailto), достъп до база данни (JDBC) и много други приложения.</p>
+            <article class="subarticle">
+                <h3>
+                    <a id="URLforMailto"></a>
+                    URL и Mailto <sup><a href="#source_3">[3]</a></sup>
+                </h3>
+                <p>Докато стандартните URL протоколи отварят новата страница във УЕБ, то mailto има за цел друго. Той отваря пощенски клиент по подразбиране, задавайки значения в съответните полета, които сме му подали като параметрите на заявка.</p>
+                <p><b>Синтаксис:</b><br><span>mailto:[email_address]?[parameters]</span></p>
+                <p><b>[email_address]:</b> в тази секция се посочват имената на получатели на имейл, както ако са зададени няколко адреса, то се те се разделят със <span>,</span>.</p>
+                <p><b>[parameters]:</b> в тази част на URL се задават двойки ключ-стойност за допълнителни параметри на един имейл като: CC, BCC, subject, body. Самите двойки се разделят със <span>&</span>.</p>  
+                <p class="subparagraph"><b>Пример:</b></p>
+                <pre>
+                    &lt;a
+                        href="mailto:web@fakeemail.com, weba@fakeemail.com?cc=jackdoe@fakeemail.com
+                        &amp;bcc=jennydoe@fakeemail.com
+                        &amp;subject=this is how to use the mailto link
+                        &amp;body=this is an article on how to use the mailto link"&gt;
+                        Example of mailto request
+                    &lt;/a&gt;</pre>       
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="URLforJDBC"></a>
+                    URL и JDBC <sup><a href="#source_4">[4]</a></sup>
+                </h3>
+                <p>JDBC или Java Database Connectivity е API(програмен интерфейс), който позволява Java приложения да комуникират с базите данни, изпращайки SQL-валидни заявки. JDBC дава възможност за извършване на стандартни <a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete" alt="CRUD operations">CRUD</a> операции, но преди това трябва да се построи връзката с конкретната база данни. Това се извършва посредством изпращането на специфичен URL.</p>
+                <p><b>Свързване на JDBC със MySQL:</b></p>
+                <p><b>Синтаксис:</b><br><span>protocol//[hosts][/database][?properties]</span></p>
+                <p class="subparagraph"><b>Пример:</b><br><span>jdbc:mysql:</span>//<span>mysql.db.server</span>:<span>3306</span>/<span>my_database</span>?<span>useSSL=false</span>&<span>serverTimezone=UTC</span></p>
+                <p class="subparagraph"><span>jdbc:mysql</span>: е протокол, чрез който ще се изгради връзката.</p>
+                <p class="subparagraph"><span>mysql.db.server</span>: е хост или по-точно казано адрес на самата базата данни, с която се опитаме да изградим конекция.</p>
+                <p class="subparagraph"><span>3306</span>: конкретен порт, на който MySQL(в случая) работи.</p>
+                <p class="subparagraph"><span>my_database</span>: това е името на базата данни, с която се опитваме да се свържем.</p>
+                <p class="subparagraph"><span>useSSL=false</span> и <span>serverTimezone=UTC</span>: това са параметрите на връзката, които се предават към базата данни.</p>
+            </article>
+        </article>
+        <article>
+            <h2>
+                <a id="NeedForURLrewriting"></a>
+                Има ли нужда от преработка на URL адреси ? <sup><a href="#source_11">[11]</a></sup><sup><a href="#source_13">[13]</a></sup>
+            </h2>
+            <p>URL адресите не винаги са представени в добре организиран и лесно четим от хора формат. Често се случва обратното. Самият URL може да съдържа името на скрипт(примерно <b>example.php</b>), който се разполага на сървъра. Този факт при промяна на реализация на скрипта може да наложи необходимост да се променя и самият URL. Също така, при подобните практики, то при преместване или реструктуризация на базата данни ще се появят счупени линкове(broken links) както вътрешни, така и от външни сайтове.</p>
+            <p>И се пита: “Има ли спасение от това ?”. Има ! Семантични URL адреси (<a href="https://en.wikipedia.org/wiki/Clean_URL" alt="Clean URL">Сlean URLs</a>)  са такива URL адреси, които са лесни за разпознаване от човек извън индустрията, оптимизирани са за търсачки (SEO, Search Engine Optimization) и допринасящи за REST стила за софтуерни архитектури. Казано по-просто: тези URL адреси отразяват същността на самият обект, който достъпват, вместо да ни ангажират с безрой ненужни параметри. Една от техниките за преработка на URL адреси е точно <span>URL rewriting</span>.</p>
+            <p class="subparagraph"><b>Примери за най-чести преработки в URL адреси:</b></p>
+            <table class="formattedTable">
+                <tr>
+                    <th>Оригинален URL</th>
+                    <th>"Чист" URL</th>
+                </tr>
+                <tr>
+                    <td>http://example.com/about.html</td>
+                    <td>http://example.com/about</td>
+                </tr>
+                <tr>
+                    <td>http://example.com/user.php?id=1</td>
+                    <td>http://example.com/user/1</td>
+                </tr>
+                <tr>
+                    <td>http://example.com/index.php?page=name</td>
+                    <td>http://example.com/name</td>
+                </tr>
+            </table>
+            <p>Такава техника може и да оправи сякаш безнадеждно лошо формиран URL адрес като:</p>
+            <pre>https://www.example.com/index.php?page=products&category=electronics&subcategory=laptops
+                &product_id=12345&ref=homepage&utm_source=google&utm_medium=cpc&utm_campaign=spring_sale
+                &utm_content=ad1&utm_term=laptop_deals&sessionid=abcdef1234567890</pre>
+            <p>И след URL rewriting адресът ще изглежда вече по следен начин:</p>
+            <p class="subparagraph"><span>https://www.example.com/products/electronics/laptops/12345</span></p>
+            <p>Впечатляващо. Доста дори. Затова самият механизм URL rewriting ще го разгледаме по-подробно.</p>
+        </article>
+        <article>
+            <h2>
+                <a id="SenseOfURLrewriting"></a>
+                URL rewriting: концепция <sup><a href="#source_5">[5]</a></sup><sup><a href="#source_1">[1]</a></sup>
+            </h2>
+            <p>URL rewriting е техника, която модифицира изгледа на URL адреса с помощта на пренаписващ двигател(rewrite engine). Този двигател е най-често част от УЕБ сървър или WEB framework. Като резултат на тази техника URL адресите стават както по-разбираеми и по-четими за хора, така и по-лесни за обработка на търсачки(search engines).</p>
+            <p>Ако стандартната зависимост между адреса и ресурса е: <b>един адрес = един ресурс</b>, то URL rewriting добавя допълнителна абстракция до тази зависимост. Тази техника почти изцяло елиминира зависимост между ресурс(примерно УЕБ страница) и адреса. С нейното прилагане адресите почват да наподобяват символни линкове. Така зависимост <b>един адрес = един ресурс</b> става <b>един адрес = един начин да намериш ресурс</b>.</p>
+            <p>Следните адреси от примерите ще сочат до един и същи ресурс, което се осигурява през по-горе спомената абстракция.</p>
+            <p class="subparagraph"><b>Пример 1:</b><br><span>…/page1.html</span><br><span>…/about-us/</span><br><span>…/about-this-website-and-me/</span><br><span>…/guess-who-am-i-24242/</span></p>
+            <p class="subparagraph"><b>Пример 2:</b><br><span>http://www.example.com/Blog/Posts.php?Year=2006&Month=12&Day=19</span><br><span>http://www.example.com/Blog/2006/12/19/</span></p>
+        </article>
+        <article>
+            <h2>
+                <a id="mod_rewrite"></a>
+                URL rewriting: Apache mod_rewrite
+            </h2>
+            <p>Ще разгледаме URL rewriting механизма в контекста на модула на Apache сървъра, който се казва <span>mod_rewrite</span>.</p>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteSetup"></a>
+                    С какво да започнем <sup><a href="#source_15">[15]</a></sup>
+                </h3>
+                <p>Преди да започнем, първо трябва да активираме на УЕБ сървъра Apache самият двигател за преработка(rewrite engine). Това ще стане чрез добавяне на конкретният ред до конфигурационен файл <span>httpd.conf</span>, който се намира в коренова директория на Apache.<br><span>AllowOverride All</span></p>
+                <p>След това <span>httpd.conf</span> трябва да изглежда подобно на:</p>
+                <figure>
+                    <img src="./img/Apache config for properties overriding.jpg" alt="httpd.conf file" width="400">
+                    <p>Фигура-2: екранна снимка за необходимите промени в конфигурационен файл httpd.conf за конкретна директория.</p>
+                </figure>
+                <p>Слагайки <u>AllowOverride All</u> в конфигурационен файл на Apache, ние ще дадем възможност за презаписване на настройки(override settings). Това ще ни е необходимо, за да се извършва процес за пренаписване(пренасочване) на адреси.</p>
+                <p>Като следваща стъпка се създава файл <span>.htaccess</span> в коренова папка, в чиято йерархия ще седят УЕБ ресурси(html страници), чиито URL адреси ще преработваме.</p>
+                <p><b>Примерен път до коренова папка:</b><br><span>…/htdocs</span></p>
+                <p><b>Примерен път до УЕБ ресурс:</b><br><span>…/htdocs/web/referats/url/rewrite.html</span></p>
+                <p><b>В самият файл .htaccess добавяме ред за активация на модула Apache mod_rewrite:</b><br><span>RewriteEngine on</span></p>
+                <p>И като пример ще достъпим един и същи <span>rewrite.html</span> файл през 2 различни URL адреса.</p>
+                <p><b>.htaccess файл:</b><br><span>RewriteEngine On<br>RewriteRule "<span class="subspan">^rewrite$</span>" "<span class="subspan">/web/referats/url/rewrite.html</span>" [L]</span></p>
+                <p><b>Достъпване на <u>rewrite.html</u> през абсолютен път:</b></p>
+                <figure>
+                    <img src="./img/Absolute path example.jpg" alt="Absolute path access to file" width="700">
+                    <p>Фигура-3: скриншот от браузъра след въвеждане в адресното поле на пълния път до  HTML файла, който се пази локално, и изпълняването му.</p>
+                </figure>
+                <p><b>Достъпване на <u>rewrite.html</u> през съкратен израз:</b></p>
+                <figure>
+                    <img src="./img/Rewritten path example.jpg" alt="Rewritten path access to file" width="700">
+                    <p>Фигура-4: скриншот от браузъра след въвеждане в адресното поле на съкратения URL адрес до HTML файла, който с помощта на Apache mod_rewrite пренасочва потребителя до необходим ресурс.</p>
+                </figure>
+                <p>И двата линка водят до един и същи ресурс. Следователно mod_rewrite заедно с rewrite engine изпълняват своите функции коректно.</p>
+                <p><b>Забележка:</b> CSS стилове в по-горните файлове за пример са вградени чрез атрибут <b>&lt;style&gt;</b> на тагове. Как да се извърши коректно пренасочване на URL адрес на файл, който е свързан с други външни файлове, това ще бъде показано в <a href="#mod_rewriteExample4" alt="Example of html file connected with external css file">този пример</a>.</p>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteWorkScheme"></a>
+                    Как работи mod_rewrite <sup><a href="#source_9">[9]</a></sup>
+                </h3>
+                <p>mod_rewrite се базира на регуларните изрази(<a href="https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions" alt="Perl Compatible Regular Expression">PCRE</a>). С помощта на изрази от специално значение(или точно зададен URL адрес) такива части на първоначален URL адрес като <span>/path</span> и <span>?query</span> може да се пренапишат.</p>
+                <p>Ако във файл <u>.htaccess</u> няма явно зададен ред <span>RewriteEngine on</span>, то тогава преработващ двигател не се функционара. Вместо да коментираме целият код с инструкциите за преработка, ние си работим само с един ред, който определя състоянието на модула <span>mod_rewrite</span>(дали ще работи).</p>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="RegexBasics"></a>
+                    Базови регуларни изрази <sup><a href="#source_9">[9]</a></sup>
+                </h3>
+                <table class="formattedTable">
+                    <tr>
+                        <th style="width: 30%;">Символ</th>
+                        <th style="width: 70%;">Значение</th>
+                    </tr>
+                    <tr>
+                        <td>.</td>
+                        <td>Всякакъв единствен символ</td>
+                    </tr>
+                    <tr>
+                        <td>+</td>
+                        <td>Предишен символ/група се повтаря един или повече пъти</td>
+                    </tr>
+                    <tr>
+                        <td>*</td>
+                        <td>Предишен символ/група се повтаря нула или повече пъти</td>
+                    </tr>
+                    <tr>
+                        <td>?</td>
+                        <td>Предишен символ/група се повтаря нула или един път</td>
+                    </tr>
+                    <tr>
+                        <td>\</td>
+                        <td>Превръща символи със специално значение в стандартни символи (escape character)</td>
+                    </tr>
+                    <tr>
+                        <td>^</td>
+                        <td>Определя началото на реда</td>
+                    </tr>
+                    <tr>
+                        <td>$</td>
+                        <td>Определя края на реда</td>
+                    </tr>
+                    <tr>
+                        <td>( )</td>
+                        <td>Елементи, заградени в този символ, се групират и се счита, че ще са разположени точно в задана последователност</td>
+                    </tr>
+                    <tr>
+                        <td>[ ]</td>
+                        <td>Елементи/конструкции, заградени в този символ, се считат за клас и се счита, че един от всичките елементи от този клас ще трябва да се срещне в контекста на конкретна позиция</td>
+                    </tr>
+                    <tr>
+                        <td>[^ ]</td>
+                        <td>Всеки един елемент/конструкция може да се срещне в контекста на конкретна позиция, освен тези, които са специфирани вътре в конструкцията след символа <span>^</span></td>
+                    </tr>
+                    <tr> 
+                        <td>{ }</td>
+                        <td>Определя брой повторения на елемент, който стои преди конструкцията <span>{ }</span>.<br>Ако искаме предишният символ/група да се повтаря максимално N пъти, то {,N}.<br>Да се повтаря минимум N пъти - {N}.<br>Да се повтаря между N и M пъти – {N,M}</td>
+                    </tr>
+                    <tr>
+                        <td>|</td>
+                        <td>Има функция като логическото ИЛИ. Един от символите/конструкции трябва да се срещне на конкретна позиция (или символ отляво на <span>|</span> или отдясно)</td>
+                    </tr>
+                </table>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteSyntax"></a>
+                    Базов синтаксис <sup><a href="#source_9">[9]</a></sup><sup><a href="#source_7">[7]</a></sup>
+                </h3>
+                <p><span>.htaccess</span> файл може да съдържа в себе си следните ключови думички: <span>RewriteCond</span>, <span>RewriteRule</span> и <span>RewriteEngine</span>.</p>
+                <p><b>Примерната структура на файла:</b></p>
+                <pre>
+                    RewriteEngine On
+                    RewriteCond %{HTPPS} off
+                    RewriteRule "^referat1$" "/web/referats/url/referat1.html" [L]</pre>
+                <p>RewriteCond клаузите могат да бъдат няколко подред и ако не е специфицирано друго, то следващото след тях <span>RewriteRule</span> ще се приложи, ако всичките условия пред него ще се изпълнят. Може да се уствнови релация между условията ИЛИ и тогава вече при изпълнението на поне едно условие ще бъде направена преработка на URL адрес.</p>
+                <pre>
+                    RewriteEngine On
+                    RewriteCond %{HTPPS} off [OR]
+                    RewriteCond %{QUERY_STRING} ^$
+                    RewriteRule ^page\.html$ newpage.html</pre>
+                <p>По-горният може да се тълкува по следен начин: ако https е изключен(http e протоколът) <b>ИЛИ</b> параметри на заявка(query string) не са зададени, то тогава търсим след <span>path</span> частта на URL <span>page.html</span> и го заменяме на <span>newpage.html</span>.</p>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteRewriteCond"></a>
+                    RewriteCond <sup><a href="#source_7">[7]</a></sup>
+                </h3>
+                <p>С тази ключова дума задаваме, че искаме да има условие, при изпълнението на което да се прилага <span>RewriteRule</span>.</p>
+                <p><b>Синтаксис:</b><br><span>RewriteCond</span> <span>НизЗаТестване</span> <span>Условие</span> <span>[Флагчета]</span></p>
+                <p><span>НизЗаТестване</span>: това е низ, който най-често отобразява сървърни променливи и те се получават със синтаксис <span>%{VARIABLE}</span>. Самият низ ще се тества в зависимост от оператора със следващият до него израз.</p>
+                <p><span>Условие</span>: този низ определя начин, по който ще се тества предишният израз до него. Това може да бъде както регулиран израз, така и сравнението на двата низа: <span>НизЗаТестване</span> и <span>Условие</span>. Ако самият тест е преминал успешно, то се преминава успешно към преработката на URL адрес в частта <b>RewriteRule</b>.</p>
+                <p><span>[Флагчета]</span>: този параметър не е задължителен. Се ползват с цел да модифицират зададено условие и изпълнението на <span>RewriteCond</span> изпълнението. Примерни ефекти са: [OR] между 2 <span>RewriteCond</span> означава, че поне един от тях трябва да е вярен, а не 2 задължително;  [NC] при RewriteCond означава, че условието ще бъде тествано, игнорирайки регистъра (малки/големи букви ще се третират по един и същи начин).</p>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteRewriteRule"></a>
+                    RewriteRule <sup><a href="#source_7">[7]</a></sup>
+                </h3>
+                <p>Ключовата дума <span>RewriteRule</span> определя начин за възможната преработка на URL адрес - свързване на низ със абсолютен файл от файловата система или конкретен URL.</p>
+                <p><b>Синтаксис:</b><br><span>RewriteRule</span> <span>Патерн</span> <span>Заместване</span> <span>[Флагчета]</span></p>
+                <p><span>Патерн</span>: регуларен израз, който ще се прилага върху от частта <span>path</span> на URL адрес и до края на адреса.</p>
+                <p><span>Заместване</span>: варианти за стойност на тази част са 3. При задаването на <span>-</span>, то никакви действия не се извършат по отношение към частта <span>Патерн</span>.При задаването на абсолютен път към конкретен файл от файловата система, то точно той ще бъде отворен при процедирането с  URL с примерен синтаксис <span>http://hostname/<span class="subspan">Патерн</span></span>.<br>Също така може да се зададе абсолютно нов URL адрес, към който да се извършва пренасочването.</p>
+                <p><span>[Флагчета]</span>: този параметър не е задължителен. Се ползват с цел да модифицират зададено условие и изпълнението на пренаписване на URL адреси.При зададен флаг <span>[L]</span> задаваме, че ако текущият израз <b>RewriteRule</b> се изпълни успешно, то следващите изрази не се обработват.<span>[NC]</span> при <b>RewriteRule</b> означава, че <span>Патерн</span> ще бъде обработен, игнорирайки регистъра (малки/големи букви ще се третират по един и същи начин).При зададен флаг <span>[R]</span> казваме на сървъра, че искаме да заместим временно([R=302]) или постоянно([R=301]) истинският URL адрес. Ако заменяме адрес завинаги, то буквално индексираме наново адрес(презаписваме оригинален) и сървър ще знае, че не сме намерени да ползваме отново оригинален адрес. При временно пренасочване вече е друго – там сървър на някакъв срок ще пренасочи адреса, но пък възможност ще остане да се върнем към първоначалния URL адрес(обикновенно се ползва, когато искаме да изтестваме нещо).</p>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteRegexBackReference"></a>
+                    Regex back-reference <sup><a href="#source_9">[9]</a></sup>
+                </h3>
+                <p>При наличието на групите в регуларните изрази, които може да са част от <span>RewriteCond</span> или <span>RewriteRule</span>, може да преизползваме конкретните групи, които са били успешно намерени от регуларен израз.</p>
+                <p><b>Примерен сценарий за използване:</b></p>
+                <pre class="subparagraph">
+                    RewriteCond %{QUERY_STRING} ^id=([0-9]+)$
+                    RewriteCond %{REQUEST_URI} ^/category/([^/]+)/?$
+                    RewriteRule “^/?([a-zA-Z]+)/([a-zA-Z]+)/?$” “/newpage.php?category=%1&id=%2&group=$1&subgroup=$2 [R=301,L]”</pre>
+                <p class="subparagraph">Референции от вида <span>%N</span>: реферира N-та група от <u>RewriteCond</u> изрази или по-точното от тяхната част за <u>Условие</u>. Номерирането на групи се почва отзад напред(последно употребена група ще може да бъде достъпена с <span>%1</span>). <span>%0</span> връща низ със всичките съществуващи групи от съответните изрази.</p>
+                <p class="subparagraph">Референции от вида <span>$N</span>: реферира N-та група от <u>RewriteRule</u> израза, в чиято част <u>Заместване</u> е специфицирана(тоест е ограничено до тялото на конкретен израз). Последно употребена група ще може да бъде достъпена с <span>%1</span>. <span>%0</span> връща низ със всичките съществуващи групи на съответен израз.</p>
+            </article>
+        </article>
+        <article>
+            <h2>
+                <a id="mod_rewriteSpecificExamples"></a>
+                mod_rewrite: специфични примери
+            </h2>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteExample1"></a>
+                    Пример-1: няколко RewriteCond израза
+                </h3>
+                <p>С променливата <span>%{REQUEST_URI}</span> получаваме <u>path</u> частта на URL, а с променливата <span>%{HTTP_HOST}</span> <u>host</u> частта на URL. Ако и двата условия са в сила, то тогава ще се продължи до <b>RewriteRule</b>.</p>
+                <pre class="subparagraph">
+                    RewriteEngine On
+                    <span class="subspan">RewriteCond</span> %{REQUEST_URI} ^(\/?referat)$
+                    <span class="subspan">RewriteCond</span> %{HTTP_HOST} ^(localhost)$
+                    RewriteRule ^(\/?referat)$ /web/referats/url/$1.html
+                    RewriteRule "^(referat\.css)$" "/web/referats/url/$1" [L]</pre>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteExample2"></a>
+                    Пример-2: няколко RewriteCond и флаг [OR]
+                </h3>
+                <p>С променливата <span>%{REQUEST_URI}</span> получаваме <u>path</u> частта на URL, а с променливата <span>%{HTTP_HOST}</span> <u>host</u> частта на URL. Ако поне едно условие е в сила, то тогава ще се продължи до <b>RewriteRule</b>. Това става заради флагчето <span>[OR]</span>.</p>
+                <pre class="subparagraph">
+                    RewriteEngine On
+                    RewriteCond %{REQUEST_URI} ^(\/?referat)$ <span class="subspan">[OR]</span>
+                    RewriteCond %{HTTP_HOST} !^(localhost)$
+                    RewriteRule ^(\/?referat)$ /web/referats/url/$1.html
+                    RewriteRule "^(referat\.css)$" "/web/referats/url/$1" [L]</pre>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteExample3"></a>
+                    Пример-3: RewriteRule и [NC] флаг
+                </h3>
+                <p><span>[NC]</span> флаг добавя игнорирането на регистъра за буквите, което веднага прави всякакви възможни варианти за изписване на дума <u>referat1</u>: rEFerat1, REFerAt1, … Такива пермутации може да са <u>2^7</u>. И в резултата на всяка една пермутация крайният URL адрес ще бъде винаги <span>/web/referats/url/referat1.html</span>, защото ползваме флаг [R=302] за временно пренасочване.</p>
+                <pre class="subparagraph">
+                    RewriteEngine On
+                    RewriteCond %{REQUEST_URI} ^(\/?referat1)$
+                    RewriteCond %{HTTP_HOST} ^(localhost)$
+                    RewriteRule ^(\/?referat1)$ /web/referats/url/referat1.html [<span class="subspan">NC</span>,R=302,L]</pre>
+            </article>
+            <article class="subarticle">
+                <h3>
+                    <a id="mod_rewriteExample4"></a>
+                    Пример-4: RewriteRule и релативно връзвани външни файлове
+                </h3>
+                <p>
+                    Предположим, че следният файл <u>referat1.html</u> включва външен CSS файл <u>referat.css</u> в себе си по следен начин:
+                    <br><span>&lt;link rel="stylesheet" href="./referat.css"&gt;</span>
+                </p>
+                <p>Предположим, че се опитаме да пренасочим точно URL, който е свързан с <u>referat1.html</u> файл:</p>
+                <pre>
+                    RewriteEngine On
+                    RewriteRule "^(referat1)$" "/web/referats/url/$1.html"</pre>
+                <p>На първи поглед, няма никакви проблеми. Обаче CSS файл, който беше свързан, вече след пренасочване от нов URL не се намира(самият път се е променил). Ще предложим 2 варианта за решение на този потенциален проблем.</p>
+                <p><span>Първият начин</span>: да пренасочим път и на CSS файл, който после успешно ще се намира в една и съща директория с HTML файл.</p>
+                <pre class="subparagraph">
+                    RewriteEngine On
+                    RewriteRule "^(referat1)$" "/web/referats/url/$1.html"
+                    <span class="subspan">RewriteRule "^(referat\.css)$" "/web/referats/url/$1"</span> [L]</pre>
+                <p><span>Вторият начин</span>: да пренасочим завинаги или временно със съответните флагове <span>[R=301]</span> или <span>[R=302]</span>, ако за нас няма разлика, как ще изглежда URL адрес при вече заредена страници. При такъв подход адрес на заредена страница ще съответства на абсолютен път до самият ресурс (<span>Патерн</span> част на <b>RewriteRule</b> ще се вижда преди страницата да се е заредила, а вече после част <span>Заместване</span> ще се вижда в адресното поле отгоре).</p>
+                <pre>
+                    RewriteEngine On
+                    RewriteRule "^(referat1)$" "/web/referats/url/$1.html" [<span class="subspan">R=302</span>,L]</pre>
+            </article>
+        </article>
+        <article>
+            <h2>
+                <a id="URLrewritingWhenCanMakeTroubles"></a>
+                URL rewriting: кога създава затруднения
+            </h2>
+            <p>Освен предимствата на техниката <span>URL rewriting</span> като улеснено запомняне и обработка на адреси от търсачки и използването на същият URL адрес дори след смяна на технология, то пак има и лек недостатък.</p>
+            <p>Да предположим, че след пренаписването на URL адрес той изглежда така:<br><span>http://www.example.com/Blog/06/04/02/</span></p>
+            <p>Сега ако потребител иска ръчно да промени URL адрес, че да достъпи други секции на УЕБ сайта примерно, то може да се сблъсне с недостатъка на описание. Параметрите на заявка липсва(query parameters), а по-точно техните имена. Така може трудно да бъде да се разпознае дата.</p>
+            <p><b>В такава ситуации първоначален формат на URL адрес би бил по-подходящ:</b><br><span>http://www.example.com/Blog/Posts.php?<span class="subspan">Year</span>=06&<span class="subspan">Month</span>=04&<span class="subspan">Day</span>=02</span></p>
+        </article>
+        <article>
+            <h2>
+                <a id="UsedSources"></a>
+                Използваните ресурси
+            </h2>
+            <section class="sources">
+                <p class="subparagraph" id="source_1">[1] <span class="author">Paul Tero</span>, <span class="title">“Introduction To URL Rewriting”</span>, зададен/публикуван <span class="publication-date">02.11.2011</span>, [<a href="http://coding.smashingmagazine.com/2011/11/02/introduction-to-url-rewriting/">http://coding.smashingmagazine.com/2011/11/02/introduction-to-url-rewriting/</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_2">[2] <span class="author">Computer Hope</span>, <span class="title">“URL”</span>, зададен/публикуван <span class="publication-date">03.05.2023</span>, [<a href="http://www.computerhope.com/jargon/u/url.htm">http://www.computerhope.com/jargon/u/url.htm</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_3">[3] <span class="author">Jessica Wilkins</span>, <span class="title">“Mailto Link – How to Make an HTML Email Link [Example Code]”</span>, зададен/публикуван <span class="publication-date">16.11.2021</span>, [<a href="https://www.freecodecamp.org/news/mailto-link-how-to-make-an-html-email-link-example-code/">https://www.freecodecamp.org/news/mailto-link-how-to-make-an-html-email-link-example-code/</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_4">[4] <span class="author">Kai Yuan</span>, <span class="title">“Jdbc URL Format for Different Databases”</span>, зададен/публикуван <span class="publication-date">08.01.2024</span>, [<a href="https://www.baeldung.com/java-jdbc-url-format">https://www.baeldung.com/java-jdbc-url-format</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_5">[5] <span class="title">“Rewrite engine”</span>, зададен/публикуван <span class="publication-date">05.03.2024</span>, [<a href="http://en.wikipedia.org/wiki/Rewrite_engine">http://en.wikipedia.org/wiki/Rewrite_engine</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_6">[6] <span class="author">Oracle</span>, <span class="title">“What Is URL”</span>, [<a href="https://docs.oracle.com/javase/tutorial/networking/urls/definition.html">https://docs.oracle.com/javase/tutorial/networking/urls/definition.html</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_7">[7] <span class="author">Apache</span>, <span class="title">“Apache Module mod_rewrite”</span>, зададен/публикуван <span class="publication-date">19.10.2023</span>, [<a href="https://httpd.apache.org/docs/current/mod/mod_rewrite.html">https://httpd.apache.org/docs/current/mod/mod_rewrite.html</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_8">[8] <span class="author">Dave Child</span>, <span class="title">“URL Rewriting for Beginners”</span>, зададен/публикуван <span class="publication-date">04.08.2008</span>, [<a href="https://aloneonahill.com/blog/url-rewriting-for-beginners/">https://aloneonahill.com/blog/url-rewriting-for-beginners/</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>  
+                <p class="subparagraph" id="source_9">[9] <span class="author">Apache</span>, <span class="title">“Apache mod_rewrite Introduction”</span>, зададен/публикуван <span class="publication-date">19.10.2023</span>, [<a href="http://httpd.apache.org/docs/current/rewrite/intro.html">http://httpd.apache.org/docs/current/rewrite/intro.html</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_10">[10] <span class="title">“URL”</span>, зададен/публикуван <span class="publication-date">24.02.2024</span>, [<a href="https://en.wikipedia.org/wiki/URL">https://en.wikipedia.org/wiki/URL</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_11">[11] <span class="title">“What is a URL”</span>, [<a href="https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL">https://developer.mozilla.org/en-US/docs/Learn/Common_questions/Web_mechanics/What_is_a_URL</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_12">[12] <span class="title">“How to Access an FTP Server from the Browser”</span>, зададен/публикуван <span class="publication-date">10.05.2022</span>, [<a href="https://www.exavault.com/blog/how-to-access-ftp-server-from-browser">https://www.exavault.com/blog/how-to-access-ftp-server-from-browser</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_13">[13] <span class="title">“Clean URL”</span>, зададен/публикуван <span class="publication-date">20.03.2024</span>, [<a href="https://en.wikipedia.org/wiki/Clean_URL">https://en.wikipedia.org/wiki/Clean_URL</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_14">[14] <span class="title">“Perl Compatible Regular Expressions”</span>, зададен/публикуван <span class="publication-date">12.03.2024</span>, [<a href="https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions">https://en.wikipedia.org/wiki/Perl_Compatible_Regular_Expressions</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_15">[15] <span class="title">“Update Apache Configuration”</span>, зададен/публикуван <span class="publication-date">11.08.2023</span>, [<a href="https://gcore.com/learning/how-enable-apache-mod-rewrite/#3-update-apache-configuration">https://gcore.com/learning/how-enable-apache-mod-rewrite/#3-update-apache-configuration</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_16">[16] <span class="author">Ralf S. Engelschall</span>, <span class="title">“URL Rewriting Guide”</span>, зададен/публикуван <span class="publication-date">1997</span>, [<a href="https://httpd.apache.org/docs/2.0/misc/rewriteguide.html">https://httpd.apache.org/docs/2.0/misc/rewriteguide.html</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_17">[17] <span class="title">“Uniform Resource Identifier”</span>, зададен/публикуван <span class="publication-date">09.04.2024</span>, [<a href="https://en.wikipedia.org/wiki/Uniform_Resource_Identifier">https://en.wikipedia.org/wiki/Uniform_Resource_Identifier</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+                <p class="subparagraph" id="source_18">[18] <span class="title">“Create, read, update and delete”</span>, зададен/публикуван <span class="publication-date">26.10.2023</span>, [<a href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">https://en.wikipedia.org/wiki/Create,_read,_update_and_delete</a>], последно посетен на <span class="last-access-date">10.04.2024</span></p>
+            </section>
+        </article>
+        <article>
+            <h2>
+                <a id="UsedPictures"></a>
+                Използваните снимки
+            </h2>
+            <section class="sources">
+                <p class="subparagraph" id="picture_1">[1] <span class="author">redempticon</span>, <span class="title">“Essay Logo“</span>, [<a href="https://cdn-icons-png.flaticon.com/128/12263/12263217.png">https://cdn-icons-png.flaticon.com/128/12263/12263217.png</a>]</p>
+                <p class="subparagraph" id="picture_2">[2] <span class="title">“Фигура-1: пълна сигнатура на URL адрес заедно с незадължителни параметри.“</span>, [<a href="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/URI_syntax_diagram.svg/1602px-URI_syntax_diagram.svg.png">https://upload.wikimedia.org/wikipedia/commons/thumb/d/d6/URI_syntax_diagram.svg/1602px-URI_syntax_diagram.svg.png</a>]</p>
+            </section>
+        </article>
+    </main>
+</body>

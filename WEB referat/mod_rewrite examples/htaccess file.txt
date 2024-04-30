@@ -1,0 +1,5 @@
+RewriteEngine On
+RewriteRule "^(referat)$" "/web/referats/url/$1.html"
+RewriteRule "^(referat\.css)$" "/web/referats/url/$1" [L]
+
+RewriteRule "^referat$" "/web/referats/url/referat.html"

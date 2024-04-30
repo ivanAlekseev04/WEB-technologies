@@ -1,0 +1,212 @@
+/*Global formatting configs*/
+img {
+    margin: auto;
+    display: block;
+    margin-bottom: 2%;
+    max-width: 100%;
+}
+
+/*Navigation container*/
+.navigation-container {
+    height: 100%;
+    width: 30%;
+    position: fixed;
+}
+
+.navigation-container h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 2em;
+    margin-left: 1%;
+    color: #acacac;
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 15%;
+}
+
+.navigation-content {
+    overflow: auto;
+    height: 100%;
+    overflow-wrap: break-word;
+    width: 80%;
+}
+
+.navigation-list {
+    padding-left: 2%;
+}
+
+.navigation-list > li {
+    list-style-type: disc;
+    margin-bottom: 5%;
+}
+
+.navigation-list > li > a {
+    color:#ff50a5;
+    text-decoration: none;
+}
+
+.list-subelement {
+    margin-left: 8%;
+    list-style: circle;
+}
+
+.navigation-list > li > a:hover {
+    border-color: black;
+    border-left: 0.1em solid white;
+    border-right: 0.1em solid white;
+    border-radius: 0.3em;
+    padding-left: 1%;
+    padding-right: 1%;
+}
+
+/*Essay Header*/
+.header-container {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    width: 70%;
+    text-align: justify;
+    font-family: cursive;
+    color: rgb(174, 174, 174);
+}
+
+.header-container h1 {
+    text-align: center;
+    margin-bottom: 3%;
+    font-size: 3.5em;
+
+}
+
+.header-container hr {
+    border: 0.2em solid deeppink;
+    border-radius: 0.2em;
+}
+
+/*Content container*/
+body {
+    background-color:rgb(31, 31, 31);
+    font-family:Arial, Helvetica, sans-serif;
+    color: rgb(174, 174, 174);
+    display: flex;
+}
+
+.content-container {
+    width: 100%;
+    display: flex;
+    margin-left: 32%;
+    flex-wrap: wrap;
+    flex-direction: column;
+    overflow-wrap: anywhere;
+}
+
+/*Article container*/ 
+main > article {
+    margin-bottom: 2%;
+    margin-right: 10%;
+}
+
+main > article h2,h3 {
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color:#bc73ff;
+    border-bottom: 0.1em solid rgb(174, 174, 174);;
+    margin-top: 0;
+    width: max-content;
+}
+
+main > article p {
+    text-align: justify;
+    font-family: cursive;
+    margin-bottom: 1%;
+}
+
+main > article span,pre {
+    border: 0.1em solid goldenrod;
+    border-radius: 12%;
+}
+
+main > article pre {
+    white-space: pre-wrap;
+    padding: 1em;
+    line-height: 1.9em;
+}
+
+main > article a {
+    text-decoration: none;
+    color:gold;
+}
+
+main > article sup {
+    font-weight: bold;
+    color: white;
+}
+
+main article > figure {
+    margin-bottom: 2%;
+}
+
+main article > figure > p {
+    color: white;
+    text-align: center;
+    margin-top: 0;
+}
+
+main > article > figure > img {
+    margin-bottom: 0;
+}
+
+/*Subelements in <article>*/
+.subparagraph {
+    margin-left: 1em;
+}
+
+.subarticle {
+    margin-left: 1em;
+}
+
+.subspan {
+    color: #ff50a5;
+    border: 0;
+}
+
+/*Table*/
+.formattedTable {
+    margin: auto;
+    margin-bottom: 2%;
+    width: 50%;
+    border: 1px solid white;
+}
+
+table td,th {
+    border: 1px solid white;
+    padding: 5%;
+}
+
+table th {
+    background-color:wheat;
+    font-weight: bold;
+    color: black;
+}
+
+/*Used sources formatting*/
+.sources > p {
+    margin-left: 1em;
+    text-align: start;
+}
+
+.author {
+    color: #bc73ff;
+    border: 0;
+}
+
+.publication-date {
+    color: #bc73ff;
+    border: 0;
+}
+
+.title {
+    color: #ff50a5;
+    border: 0;
+}
+
+.last-access-date {
+    color: #bc73ff;
+    border: 0;
+}
