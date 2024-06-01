@@ -25,7 +25,7 @@
         //header("Location: session_destroyed.html"); // think about it later
         exit('изходът е успешен');
     } else {
-        http_response_code(301);
+        http_response_code(401);
         echo json_encode(['message' => 'потребител не е логнат']);
     }
 ?>

@@ -21,7 +21,7 @@ session_start();
 
 // When user isn't logged in
 if(!isset($_SESSION['user'])) {
-    http_response_code(301);
+    http_response_code(401);
     exit(json_encode(['message' => 'потребител не е логнат']));
 }
 
