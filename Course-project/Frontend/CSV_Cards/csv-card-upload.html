@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CSV Upload Form</title>
+    <link rel="stylesheet" href="csv-form.css">
+    <script src="csv-form-handler.js" defer></script>
+</head>
+<body>
+    <form id="csv-form">
+        <label for="csv">Upload CSV File:</label>
+        <input type="file" id="csv" name="csv" accept=".csv" enctype="multipart/form-data" required> <!--enctype was added-->
+        <button type="submit">Upload CSV</button>
+        <div id="errorMessage" class="error"></div>
+    </form>
+</body>
+</html>
