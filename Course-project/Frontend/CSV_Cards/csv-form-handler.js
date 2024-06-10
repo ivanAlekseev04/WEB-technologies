@@ -14,7 +14,7 @@ form.addEventListener('submit', (event) => {
     const formData = new FormData();
     formData.append('csv', file);
     
-    fetch('../../../backend/api/upload_csv.php', {
+    fetch('../../Backend/API/upload_csv.php', {
         method: 'POST',
         body: formData
     })

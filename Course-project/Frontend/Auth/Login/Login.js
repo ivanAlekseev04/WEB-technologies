@@ -27,7 +27,7 @@ form.addEventListener("submit", (event) => {
         //return res.json();
     })
     .then(data => {
-        location = "../../CSV_Cards/csv-card-upload.html";
+        location = "../../Profile/profile.html";
     })
     .catch(err => {
         //console.error(err.message);

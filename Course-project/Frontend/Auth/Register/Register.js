@@ -26,9 +26,9 @@ form.addEventListener("submit", (event) => {
         form.reset();
         //return res.json();
     })
-    // .then(data => {
-    //     console.log(data);
-    // })
+    .then(data => {
+        location = "../Login/Login.html";
+    })
     .catch(err => {
         // console.error(err.message);
         alert(err.message);

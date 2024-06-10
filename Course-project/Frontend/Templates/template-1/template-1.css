@@ -1,0 +1,104 @@
+/* Basic reset for consistent styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: url('background-img.jpg') no-repeat center center fixed; /* Set the background image */
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 500px;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+.card-header {
+    background-color: #ff6b6b;
+    color: white;
+    padding: 10px 0;
+    border-radius: 15px 15px 0 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+.card-header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.card-body {
+    padding-top: 60px; /* Push content below header */
+    padding-bottom: 20px;
+    color: #333;
+}
+
+.card-body p {
+    margin: 10px 0;
+    font-size: 16px;
+}
+
+.card-body span {
+    font-weight: bold;
+}
+
+.card-footer {
+    margin-top: 20px;
+    color: #777;
+    font-size: 14px;
+}
+
+/* Animation for card entrance */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+    .card {
+        padding: 15px;
+    }
+
+    .card-header h1 {
+        font-size: 20px;
+    }
+
+    .card-body p {
+        font-size: 14px;
+    }
+
+    .card-footer {
+        font-size: 12px;
+    }
+}

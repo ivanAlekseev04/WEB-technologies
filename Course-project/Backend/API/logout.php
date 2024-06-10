@@ -23,7 +23,7 @@
 
         // Redirect to a confirmation page or back to the home page 
         //header("Location: session_destroyed.html"); // think about it later
-        exit('изходът е успешен');
+        exit(json_encode(['message' => 'изходът е успешен']));
     } else {
         http_response_code(401);
         echo json_encode(['message' => 'потребител не е логнат']);
