@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <title>CSV Upload Form</title>
-    <script src="csv-form-handler.js" defer></script>
-    <link rel="stylesheet" href="csv-form.css">
+    <script src="./CsvFormHandler.js" defer></script>
+    <link rel="stylesheet" href="./CsvForm.css">
 </head>
 <body>
     <section>
         <form id="csv-form">
             <label for="csv">Upload CSV file</label>
-            <input type="file" id="csv" name="csv" accept=".csv" enctype="multipart/form-data" required> <!--enctype was added-->
+            <input type="file" id="csv" name="csv" accept=".csv" enctype="multipart/form-data" required>
             <button type="submit">Upload CSV</button>
-            <!--<div id="errorMessage" class="error"></div>-->
         </form>
     </section>
 </body>
