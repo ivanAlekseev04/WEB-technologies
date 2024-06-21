@@ -67,5 +67,6 @@ function addSentMessage(message) {
     msgDiv.className = 'error';
     msgDiv.textContent = message.message;
     msgDiv.id = "messageSent";
+
     form.appendChild(msgDiv);
 }

@@ -29,6 +29,7 @@ function fetchReceivedCards(page) {
                 receivedCardsContainer.appendChild(cardElement);
             });
             updateReceivedPagination(data.totalPages, page);
+
         })
         .catch(error => {
             addMessage(error);
@@ -67,5 +68,6 @@ function addMessage(message) {
     msgDiv.className = 'error';
     msgDiv.textContent = message.message;
     msgDiv.id = "messageReceived";
+
     form.appendChild(msgDiv);
 }
