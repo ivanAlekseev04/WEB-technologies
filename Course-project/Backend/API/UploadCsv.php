@@ -67,6 +67,11 @@
         if($i > 0) { 
             $row = explode(",", rtrim($rows[$i]));
 
+            if(count($row) != 3) {
+                http_response_code(400); 
+                exit(json_encode(["success" => false, "message" => "Invalid CSV format on line $i"]));
+            }
+
             $sender_id = get_id($connection, $_SESSION['user']["username"]);
             $receiver_id = get_id($connection, $row[0]);
 

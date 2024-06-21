@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function handleLogout() {
-        fetch('../../Backend/Api/Logout.php', {
+        fetch('../../Backend/API/logout.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

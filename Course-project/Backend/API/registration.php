@@ -30,22 +30,33 @@
             $db = new DB();
             $conn = $db->getConnection();
 
-            $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+            $stmt_username = $conn->prepare("SELECT * FROM users WHERE username = :username");
+            $stmt_username->execute(['username' => $userData['username']]);
 
-            $stmt = $conn->prepare($sql);
-            $stmt->execute([$userData["username"], $userData["email"],
+            $stmt_email = $conn->prepare("SELECT * FROM users WHERE email = :email");
+            $stmt_email->execute(['email' => $userData['email']]);
+
+            if($stmt_username->rowCount() != 0) {
+                http_response_code(400);
+                echo json_encode(['success' => false, "message" => "Username is already used"]);
+            }
+            else if($stmt_email->rowCount() != 0) {
+                http_response_code(400);
+                echo json_encode(['success' => false, "message" => "Email is already used"]);
+            }
+            else {
+                 $sql = "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([$userData["username"], $userData["email"],
                             $userData["password"]]);
 
-            echo json_encode(['success' => true, "message" => "Successful registration"]);
- 
+                echo json_encode(['success' => true, "message" => "Successful registration"]);
+            }
+           
         } catch (PDOException $e) {
             http_response_code(500);
-
-            if ($e->errorInfo[1] === 1062) {
-                echo json_encode(['success' => false, "message" => "Email address is already registered"]);
-            } else {
-                echo json_encode(['success' => false, "message" => "Failed registration"]);
-            }
+            echo json_encode(['success' => false, "message" => "Failed registration"]);   
         }
 
     } else {

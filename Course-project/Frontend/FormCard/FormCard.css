@@ -29,8 +29,8 @@ html {
 }
 
 body {
-    background: linear-gradient(to right, rgb(197, 205, 248), rgb(227, 227, 227));
-    /*background: linear-gradient(135deg, #5faaff, #7b91fe);*/
+   /* background: linear-gradient(to right, rgb(197, 205, 248), rgb(227, 227, 227));*/
+    background: linear-gradient(135deg, #5faaff, #7b91fe);
     margin: 0; 
     padding: 0; 
 }

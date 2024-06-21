@@ -115,3 +115,18 @@ li {
   background-color: rgb(243, 247, 255);
   color: #3252f4;
 }
+
+.mission {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 45%;
+  display: flex;
+  justify-content: center;
+}
+
+#mission-container {
+ display: flex;
+ justify-content: center;
+}

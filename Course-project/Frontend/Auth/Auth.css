@@ -38,7 +38,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 45em; 
-    background-color: #f5f5f5;
+    background: linear-gradient(135deg, #5faaff, #7b91fe);;
 }
 
 .container {
