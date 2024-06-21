@@ -21,11 +21,9 @@
         // Finally, destroy the session.
         session_destroy();
 
-        // Redirect to a confirmation page or back to the home page 
-        //header("Location: session_destroyed.html"); // think about it later
-        exit(json_encode(['message' => 'изходът е успешен']));
+        exit(json_encode(['success' => true, 'message' => 'Succesfully logged out']));
     } else {
         http_response_code(401);
-        echo json_encode(['message' => 'потребител не е логнат']);
+        echo json_encode(['success' => false, 'message' => "User isn't logged in"]);
     }
 ?>

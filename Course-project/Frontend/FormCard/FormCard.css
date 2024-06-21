@@ -2,6 +2,32 @@ html {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Basic error message styling */
+.error {
+    color: #D8000C; /* Red color */
+    background-color: #FFBABA;
+    border: 0.08em solid #D8000C;
+    padding: 1em;
+    border-radius: 0.5em;
+    font-size: 1.0em;
+    font-weight: bold; 
+    display: flex;
+    align-items: center;
+}
+
+/* Basic success message styling */
+.success {
+    color: #79f705; /* Red color */
+    background-color: #6188db;
+    border: 0.08em solid #0c0774;
+    padding: 1em;
+    border-radius: 0.5em;
+    font-size: 1.0em;
+    font-weight: bold; 
+    display: flex;
+    align-items: center;
+}
+
 body {
     background: linear-gradient(to right, rgb(197, 205, 248), rgb(227, 227, 227));
     /*background: linear-gradient(135deg, #5faaff, #7b91fe);*/

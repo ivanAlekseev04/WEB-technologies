@@ -2,7 +2,7 @@
     header('Content-Type: application/json; charset=utf-8');
     mb_internal_encoding("UTF-8");
 
-    require_once('../db/db.php');
+    require_once('../Db/Db.php');
 
     function login($userData) {
         try {
@@ -25,7 +25,8 @@
                 return null;
             }
         } catch(PDOException $e) {
-            throw new Error($e->getMessage());
+            http_response_code(400);
+            echo json_encode(['success' => false, 'message' => "Can't login: " . $e->getMessage()]);
         }
     }
 
@@ -37,7 +38,7 @@
 
             if(!$user) {
                 http_response_code(400);
-                echo json_encode(['message' => 'входът е неуспешен']);
+                echo json_encode(['success' => false, 'message' => 'Bad credentials for login']);
             } else {
                 session_start();
                 
@@ -45,10 +46,10 @@
             }
         } catch(Error $e) {
             http_response_code(500);
-            echo json_encode(['message' => 'грешка при вход']);
+            echo json_encode(['success' => false, 'message' => 'Error during login']);
         }
     } else {
         http_response_code(400);
-        echo json_encode(['message' => 'невалидни данни']);
+        echo json_encode(['success' => false, 'message' => 'Invalid user data']);
     }
 ?>

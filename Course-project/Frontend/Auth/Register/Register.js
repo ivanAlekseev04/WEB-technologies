@@ -9,7 +9,7 @@ form.addEventListener("submit", (event) => {
         userData[i.name] = i.value;
     })
 
-    fetch("../../../Backend/API/registration.php", {
+    fetch("../../../Backend/Api/Registration.php", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -24,13 +24,39 @@ form.addEventListener("submit", (event) => {
         }
 
         form.reset();
-        //return res.json();
     })
     .then(data => {
         location = "../Login/Login.html";
     })
     .catch(err => {
-        // console.error(err.message);
-        alert(err.message);
+        addMessage(err);
     });
 })
+
+function addMessage(message) {
+    // Find the form element
+    const form = document.getElementById('registrationForm');
+    const msg = document.getElementById('message');
+
+    if(msg) {
+    
+        msg.className = 'error';
+    
+        // Add the error message text
+        msg.textContent = message.message;
+
+        return;
+    }
+
+    // Create a new div element
+    const msgDiv = document.createElement('div');
+
+    msgDiv.className = 'error';
+
+    // Add the error message text
+    msgDiv.textContent = message.message;
+
+    msgDiv.id = "message";
+    // Append the error div to the end of the form
+    form.appendChild(msgDiv);
+}

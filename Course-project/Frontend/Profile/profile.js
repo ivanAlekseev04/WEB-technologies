@@ -22,36 +22,68 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function handleLogout() {
-        console.log('Logout button clicked');
-        fetch('../../Backend/API/logout.php', {
+        fetch('../../Backend/Api/Logout.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             }
         })
-        .then(response => response.json())
+        .then(response => {
+            if(response.ok) {
+                return response.json();
+            }
+    
+            return response.json().then(errorData => {
+                throw new Error(errorData.message || 'Unknown error occurred');
+            });
+        })
         .then(data => {
-            if (data.message === 'изходът е успешен') {
-                console.log('Logout successful');
-                location = '../Home/home.html'; 
-                console.error('Logout failed:', data.message);
+            if (data.success) {
+                location = '../Home/Home.html'; 
             }
         })
-        .catch(error => console.error('Error:', error));
+        .catch(error => {
+            addMessage(error);
+        });
     }
 
     function handleSeeYourCardBox() {   
-        console.log('See your card box button clicked');
-        window.location.href = '../Card_Box/card-box.html';
+        window.location.href = '../CardBox/CardBox.html';
     }
 
     function handleSendCardWithForm() {
-        console.log('Send card with form button clicked');
-        window.location.href = '../Form_Card/form-card.html';
+        window.location.href = '../FormCard/FormCard.html';
     }
 
     function handleSendCardWithCsv() {
-        console.log('Send card with CSV button clicked');
-        window.location.href = '../CSV_Cards/csv-card-upload.html';
+        window.location.href = '../CsvCards/CsvCardUpload.html';
     }
 });
+
+function addMessage(message) {
+    // Find the form element
+    const form = document.getElementById('navigationBar');
+    const msg = document.getElementById('message');
+
+    if(msg) {
+    
+        msg.className = 'error';
+    
+        // Add the error message text
+        msg.textContent = message.message;
+
+        return;
+    }
+
+    // Create a new div element
+    const msgDiv = document.createElement('div');
+
+    msgDiv.className = 'error';
+
+    // Add the error message text
+    msgDiv.textContent = message.message;
+
+    msgDiv.id = "message";
+    // Append the error div to the end of the form
+    form.appendChild(msgDiv);
+}

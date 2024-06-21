@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 01, 2024 at 01:27 PM
+-- Generation Time: Jun 12, 2024 at 09:13 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -31,7 +31,6 @@ CREATE TABLE `cards` (
   `id` int(11) NOT NULL,
   `sender_id` int(11) NOT NULL,
   `receiver_id` int(11) NOT NULL,
-  `design_id` int(11) DEFAULT NULL,
   `occasion` varchar(50) DEFAULT NULL,
   `wish` text DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
@@ -41,26 +40,20 @@ CREATE TABLE `cards` (
 -- Dumping data for table `cards`
 --
 
-INSERT INTO `cards` (`id`, `sender_id`, `receiver_id`, `design_id`, `occasion`, `wish`, `created_at`) VALUES
-(3, 1, 2, 1, 'Test', 'Some random text', '2024-05-31 15:56:45'),
-(4, 1, 2, 1, 'Test', 'Some random text', '2024-05-31 15:57:05'),
-(8, 4, 2, 1, 'Test', 'Some random text', '2024-06-01 10:41:51');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `card_templates`
---
-
-CREATE TABLE `card_templates` (
-  `id` int(11) NOT NULL,
-  `border_color` varchar(7) DEFAULT '#000000',
-  `border_width` int(11) DEFAULT 1,
-  `background_color` varchar(7) DEFAULT '#FFFFFF',
-  `font_style` varchar(50) DEFAULT 'Arial',
-  `font_size` int(11) DEFAULT 14,
-  `text_color` varchar(7) DEFAULT '#000000'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+INSERT INTO `cards` (`id`, `sender_id`, `receiver_id`, `occasion`, `wish`, `created_at`) VALUES
+(9, 4, 5, 'Test', 'Some random text', '2024-06-12 12:31:24'),
+(16, 5, 4, 'Test', 'Some random text', '2024-06-12 15:47:40'),
+(17, 4, 5, 'Test', 'Some random text', '2024-06-12 18:35:51'),
+(24, 7, 4, 'test', '1', '2024-06-12 18:47:30'),
+(25, 7, 7, '1', '1', '2024-06-12 18:47:38'),
+(26, 7, 7, '1', '1', '2024-06-12 18:49:59'),
+(27, 7, 4, 'Test', 'Some random text', '2024-06-12 18:51:02'),
+(28, 7, 7, '1', '1', '2024-06-12 18:52:40'),
+(29, 7, 5, 'test', '1erere', '2024-06-12 18:57:04'),
+(30, 7, 5, 'test', '11111', '2024-06-12 19:04:02'),
+(31, 7, 7, '1', '1', '2024-06-12 19:04:21'),
+(32, 7, 4, 'Test', 'Some random text', '2024-06-12 19:05:16'),
+(33, 10, 4, 'Test', 'Some random text', '2024-06-12 19:10:49');
 
 -- --------------------------------------------------------
 
@@ -81,7 +74,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`) VALUES
 (4, 'Ivan', '1212dgsdg@gmail.com', '$2y$10$bZPdKYinib4ICMBBNgs2je.cN4THq1SEMsIv76SqTY4G3OZuNeMZe'),
-(5, 'Mitko', 'test@gmail.com', '$2y$10$M02XVZlRoAdxmUDgCHOOCeIX5SrPDa.TWjA8.RRBWkWcmL0rK0w7e');
+(5, 'Mitko', 'test@gmail.com', '$2y$10$M02XVZlRoAdxmUDgCHOOCeIX5SrPDa.TWjA8.RRBWkWcmL0rK0w7e'),
+(10, '1', '1@i.ii', '$2y$10$.MYwXyEiiGQxY5h.UdYUj.6/t3Ln.hCqjcu5S1hUFyEGvJvpacXGu');
 
 --
 -- Indexes for dumped tables
@@ -108,13 +102,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `cards`
 --
 ALTER TABLE `cards`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

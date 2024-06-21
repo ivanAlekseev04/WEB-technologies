@@ -5,6 +5,34 @@
     font-family: 'Roboto', sans-serif;
 }
 
+/* Basic error message styling */
+.error {
+    color: #D8000C; /* Red color */
+    background-color: #FFBABA;
+    border: 0.08em solid #D8000C;
+    padding: 1em;
+    border-radius: 0.5em;
+    font-size: 1.0em;
+    font-weight: bold; 
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
+}
+
+/* Basic success message styling */
+.success {
+    color: #79f705; /* Red color */
+    background-color: #6188db;
+    border: 0.08em solid #0c0774;
+    padding: 1em;
+    border-radius: 0.5em;
+    font-size: 1.0em;
+    font-weight: bold; 
+    display: flex;
+    align-items: center;
+    margin-top: 1em;
+}
+
 body {
     display: flex;
     justify-content: center;
