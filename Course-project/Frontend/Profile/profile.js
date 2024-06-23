@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
     function handleLogout() {
-        fetch('../../Backend/API/logout.php', {
+        fetch('../../Backend/API/Logout.php', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -61,29 +61,22 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 
 function addMessage(message) {
-    // Find the form element
     const form = document.getElementById('navigationBar');
     const msg = document.getElementById('message');
 
     if(msg) {
     
         msg.className = 'error';
-    
-        // Add the error message text
         msg.textContent = message.message;
 
         return;
     }
 
-    // Create a new div element
     const msgDiv = document.createElement('div');
 
     msgDiv.className = 'error';
-
-    // Add the error message text
     msgDiv.textContent = message.message;
 
     msgDiv.id = "message";
-    // Append the error div to the end of the form
     form.appendChild(msgDiv);
 }

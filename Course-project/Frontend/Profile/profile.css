@@ -4,9 +4,8 @@
   padding: 0;
 }
 
-/* Basic error message styling */
 .error {
-  color: #D8000C; /* Red color */
+  color: #D8000C;
   background-color: #FFBABA;
   border: 0.08em solid #D8000C;
   padding: 1em;
@@ -20,9 +19,8 @@
   margin-left: 80em;
 }
 
-/* Basic success message styling */
 .success {
-  color: #79f705; /* Red color */
+  color: #79f705; 
   background-color: #6188db;
   border: 0.08em solid #0c0774;
   padding: 1em;

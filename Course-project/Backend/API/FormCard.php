@@ -39,7 +39,6 @@
             ]));
     }
 
-    // Fetch all cards
     try{
         $sender_id = get_id($connection, $_SESSION["user"]["username"]);
         $receiver_id = get_id($connection, $cardData["receiver-name"]);
@@ -52,18 +51,15 @@
             $stmt = $connection->prepare("INSERT INTO cards (sender_id, receiver_id, occasion, wish)
                             VALUES (:sender_id, :receiver_id, :occasion, :wish)");
 
-            // Bind parameters
             $stmt->bindParam(':sender_id', $sender_id);
             $stmt->bindParam(':receiver_id', $receiver_id);
             $stmt->bindParam(':occasion', $cardData["occasion"]);
             $stmt->bindParam(':wish', $cardData["wish"]);
 
-            // Execute the statement
             $stmt->execute();
             echo json_encode(['success' => true, 'message' => 'Greeting card data has been saved successfully']);   
         }
     } catch (PDOException $e) {
-        // Error response
         http_response_code(500);
         echo json_encode(['success' => false, 'message' => 'Database error: ' . $e->getMessage()]);
     }

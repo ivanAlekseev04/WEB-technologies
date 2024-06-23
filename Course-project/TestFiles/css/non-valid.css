@@ -1,0 +1,22 @@
+.card-header {
+        font-style: italic;
+    font-weight: bold;
+                   color: rgb(172, 6, 255);
+        background-color: #baf810;
+    
+
+
+
+
+
+
+
+
+
+
+    .card {
+        background-color: #f8147b;
+                                       color: #1efa9e;font-size: 2em;
+        border-radius: 10px;
+        font-weight: bold;
+         }

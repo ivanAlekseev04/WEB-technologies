@@ -78,12 +78,10 @@ main {
 .csv-form div button,
 .csv-form div input,
 .csv-form div textarea {
-    /*border-radius: 0%;*/
     border: 0.5px solid gray;
     box-sizing: border-box;
     width: 100%; 
     height: 2.1em; 
-    /*border: none;*/
     border-radius: 8px;
 }
 
@@ -96,7 +94,6 @@ main {
     color: #4a5ec5;
     background-color: #dee3ff;
     border: 2px solid #4a5ec5;
-    /*border-color: #3252f4;*/
 }
 
 .csv-form div button:hover {

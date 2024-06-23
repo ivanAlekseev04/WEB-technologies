@@ -24,8 +24,8 @@ catch (PDOException $e) {
 }
 
 
-$sql = $connection->prepare("SELECT username FROM users");
-$sql->execute();
+$sql = $connection->prepare("SELECT username FROM users WHERE username != :curr_username");
+$sql->execute(['curr_username' => $_SESSION['user']['username']]);
 
 $usernames = array();
 if ($sql->rowCount() > 0) {

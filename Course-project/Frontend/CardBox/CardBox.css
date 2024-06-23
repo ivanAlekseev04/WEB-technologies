@@ -1,6 +1,6 @@
-/* Basic error message styling */
+
 .error {
-    color: #D8000C; /* Red color */
+    color: #D8000C; 
     background-color: #FFBABA;
     border: 0.08em solid #D8000C;
     padding: 1em;
@@ -11,9 +11,8 @@
     align-items: center;
 }
 
-/* Basic success message styling */
 .success {
-    color: #79f705; /* Red color */
+    color: #79f705; 
     background-color: #6188db;
     border: 0.08em solid #0c0774;
     padding: 1em;
@@ -73,7 +72,8 @@ a {
     margin: 0 5px;
     padding: 10px 15px;
     border: none;
-    background-color: #007bff;
+    border-radius: 5px;
+    background-color: #3d9bff;
     color: white;
     cursor: pointer;
     font-size: 1rem;

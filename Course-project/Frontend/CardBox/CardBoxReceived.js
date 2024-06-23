@@ -8,7 +8,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function fetchReceivedCards(page) {
     fetch(`../../Backend/Api/CardBoxReceived.php?page=${page}&limit=1`)
-        .then(response => response.json())
+        .then(response => {
+            if(!response.ok) {
+                return response.json().then(errorData => {
+                    throw new Error(errorData.message || 'Unknown error occurred');
+                });
+            }
+
+            return response.json();
+        })
         .then(data => {
             const receivedCardsContainer = document.getElementById('received-cards');
             receivedCardsContainer.innerHTML = '';

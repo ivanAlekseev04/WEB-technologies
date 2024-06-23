@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customization</title>
+    <link rel="stylesheet" href="./CardCustomizer.css">
+    <script src="./CardCustomizer.js" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div class="design-form">
+            <div class="form-header">
+                <h1>Apply card design</h1>
+                <p>make something special</p>
+            </div>
+            <form id="designForm" class="form-background">
+                <label for="css">Upload CSS file</label>
+                <input type="file" id="css" name="css" accept=".css">
+                <div class="css-template">Template for CSS file 
+                    <span class="info" id="info">i</span></div>
+
+                <label for="image">Upload image</label>
+                <input type="file" id="image" name="image" accept="image/jpeg">
+
+                <button type="submit" id="reg">Apply styles</button>
+            </form>
+            <div class="floating-window" id="floatingWindow">
+                <span class="close-btn" id="closeBtn">&times;</span>
+                <img src="./CSS template.png" alt="Example of CSS file">
+            </div>
+        </div>
+    </div>
+</body>
+</html>

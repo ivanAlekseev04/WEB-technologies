@@ -40,8 +40,8 @@ $user_id = get_id($connection, $_SESSION["user"]["username"]);
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 $limit = isset($_GET['limit']) ? (int)$_GET['limit'] : 1; 
 $offset = ($page - 1) * $limit;
-
-$sql = $connection->prepare("SELECT * FROM cards JOIN users ON cards.receiver_id=users.id WHERE sender_id = :user_id LIMIT :limit OFFSET :offset");
+//TODO: check; was Select cards.id,username,sender_id,occasion,wish,created_at
+$sql = $connection->prepare("SELECT cards.id,username,sender_id,occasion,wish,created_at,style,image FROM cards JOIN users ON cards.receiver_id=users.id WHERE sender_id = :user_id LIMIT :limit OFFSET :offset");
 $sql->bindValue(':user_id', $user_id, PDO::PARAM_INT);
 $sql->bindValue(':limit', $limit, PDO::PARAM_INT);
 $sql->bindValue(':offset', $offset, PDO::PARAM_INT);
@@ -50,6 +50,9 @@ $sql->execute();
 $cards = array();
 if ($sql->rowCount() > 0) {
     while($row = $sql->fetch(PDO::FETCH_ASSOC)) {
+        //TODO: added
+        $row['image'] = base64_encode($row['image']);
+
         $cards[] = $row;
     }
 }

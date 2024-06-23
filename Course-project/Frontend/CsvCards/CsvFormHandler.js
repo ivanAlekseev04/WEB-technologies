@@ -30,8 +30,8 @@ form.addEventListener('submit', (event) => {
     .then(data => {
         if (data.success) {
             form.reset(); // Reset the form
-  
             addMessage(data);
+            location = '../CardCustomizer/CardCustomizer.html'; // TODO: check, was added
         }
     })
     .catch(error => {

@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function() {
     
     const mission_text = document.getElementById('mission-text');
 
-    fetch('../../Backend/API/mission.php', {
+    fetch('../../Backend/API/Mission.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'

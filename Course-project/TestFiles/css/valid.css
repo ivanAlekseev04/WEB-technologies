@@ -1,0 +1,14 @@
+.card {
+    background-color: #f8147b;
+    font-weight: bold;
+    color: #bfe70d;
+    font-size: 0.5em;
+    border-radius: 200px;
+}
+
+.card-header {
+    background-color: #fe00c3;
+    color: rgb(225, 67, 23);
+    font-style: italic;
+    font-weight: bold;
+}

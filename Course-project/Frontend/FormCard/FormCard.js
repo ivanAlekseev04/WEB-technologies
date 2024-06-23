@@ -40,6 +40,7 @@ form.addEventListener('submit', (event) => {
             // Handle the success scenario
             form.reset(); // Clear the form
             addMessage({success: true, message: 'Greeting card sent successfully!'});
+            location = '../CardCustomizer/CardCustomizer.html'; // TODO: chek, was added
         }
     })
     .catch(err => {
